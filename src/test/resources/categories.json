@@ -1,0 +1,30 @@
+[
+  {
+    "name": "Failed tests",
+    "matchedStatuses": ["failed"]
+  },
+  {
+    "name": "Broken tests",
+    "matchedStatuses": ["broken"]
+  },
+  {
+    "name": "Ignored tests",
+    "matchedStatuses": ["skipped"]
+  },
+  {
+    "name": "Assertion failures",
+    "messageRegex": ".*AssertionError.*"
+  },
+  {
+    "name": "Test timeouts",
+    "messageRegex": ".*TimeoutException.*"
+  },
+  {
+    "name": "Element not found",
+    "messageRegex": ".*NoSuchElementException.*"
+  },
+  {
+    "name": "Environment issues",
+    "messageRegex": ".*ConnectionException.*"
+  }
+]

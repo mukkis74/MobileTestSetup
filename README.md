@@ -95,12 +95,34 @@ mvn clean test -DsuiteXmlFile=src/test/resources/testng.xml
 mvn clean test -Dgroups=smoke
 ```
 
-### Generate Allure Report
+### Generate and View Allure Reports
+
+#### Generate Report
 ```bash
 mvn allure:report
 ```
 
 The report will be generated in `target/site/allure-maven-plugin/index.html`
+
+#### Serve Report (Interactive Mode)
+```bash
+mvn allure:serve
+```
+This will generate the report and automatically open it in your default browser.
+
+#### Allure Report Features
+- **Dashboard**: Overview of test execution with statistics
+- **Suites**: Detailed test suite information
+- **Graphs**: Visual representation of test results
+- **Timeline**: Chronological view of test execution
+- **Categories**: Tests grouped by failure categories
+- **Attachments**: Screenshots, logs, and other test artifacts
+
+#### Allure Configuration
+The framework includes the following Allure configuration:
+- **allure.properties**: Configures report directories and link patterns
+- **categories.json**: Defines custom categories for test failures
+- **TestNG Listener**: Automatically captures test execution data
 
 ## Project Structure
 
@@ -157,18 +179,67 @@ public void testExample() {
 ## Best Practices
 
 - Use the Page Object Model pattern
-- Add descriptive Allure annotations
 - Group tests appropriately (smoke, regression, etc.)
 - Take screenshots on test failures
 - Log important steps and information
 - Keep tests independent of each other
 
+### Using Allure Annotations
+
+Enhance your test reports with Allure annotations:
+
+```java
+@Test
+@Description("Detailed test description")
+@Feature("Feature name")
+@Story("User story reference")
+@Severity(SeverityLevel.CRITICAL)
+@Issue("JIRA-123")
+@TmsLink("TMS-456")
+@Link(name = "Documentation", url = "https://example.com/docs")
+public void testExample() {
+    // Test steps
+}
+```
+
+#### Common Annotations:
+- **@Description**: Detailed test description
+- **@Feature**: High-level feature being tested
+- **@Story**: User story or requirement being verified
+- **@Severity**: Test importance (BLOCKER, CRITICAL, NORMAL, MINOR, TRIVIAL)
+- **@Issue**: Link to issue tracker
+- **@TmsLink**: Link to test management system
+- **@Link**: Custom link to external resources
+
+#### Adding Steps and Attachments:
+```java
+@Step("Login with username: {0} and password: {1}")
+public void login(String username, String password) {
+    // Login implementation
+}
+
+@Attachment(value = "Screenshot", type = "image/png")
+public byte[] takeScreenshot() {
+    // Screenshot implementation
+    return ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
+}
+```
+
 ## Troubleshooting
 
+### General Issues
 - **Appium Connection Issues**: Ensure Appium server is running and the correct port is configured
 - **Device Not Found**: Check device/emulator is running and properly configured
 - **Element Not Found**: Verify locators and add appropriate waits
 - **Test Failures**: Check screenshots and logs for details
+
+### Allure Report Issues
+- **Missing Reports**: Ensure tests are running with the Allure listener enabled in testng.xml
+- **No Screenshots in Report**: Verify that screenshots are being taken and attached using @Attachment
+- **Empty Categories**: Check that categories.json is properly configured
+- **Report Not Opening**: Try using `mvn allure:serve` instead of opening the HTML file directly
+- **Missing Test Steps**: Ensure methods are annotated with @Step
+- **Broken Links**: Update link patterns in allure.properties to match your issue tracking system
 
 ## Contributing
 
