@@ -1,0 +1,93 @@
+{
+  "android": {
+    "devices": [
+      {
+        "name": "Pixel_4_API_30",
+        "platformVersion": "11.0",
+        "deviceType": "emulator",
+        "locale": "en_US"
+      },
+      {
+        "name": "Samsung_Galaxy_S10",
+        "platformVersion": "10.0",
+        "deviceType": "real",
+        "locale": "en_GB"
+      },
+      {
+        "name": "Xiaomi_Mi_10",
+        "platformVersion": "11.0",
+        "deviceType": "real",
+        "locale": "fr_FR"
+      }
+    ],
+    "capabilities": {
+      "appPackage": "com.example.app",
+      "appActivity": "com.example.app.MainActivity",
+      "automationName": "UiAutomator2",
+      "noReset": false,
+      "fullReset": true,
+      "newCommandTimeout": 300,
+      "autoGrantPermissions": true
+    }
+  },
+  "ios": {
+    "devices": [
+      {
+        "name": "iPhone 12",
+        "platformVersion": "15.0",
+        "deviceType": "simulator",
+        "locale": "en_US"
+      },
+      {
+        "name": "iPhone 11",
+        "platformVersion": "14.5",
+        "deviceType": "real",
+        "locale": "en_GB"
+      },
+      {
+        "name": "iPad Pro",
+        "platformVersion": "15.0",
+        "deviceType": "simulator",
+        "locale": "fr_FR"
+      }
+    ],
+    "capabilities": {
+      "bundleId": "com.example.app",
+      "automationName": "XCUITest",
+      "noReset": false,
+      "fullReset": true,
+      "newCommandTimeout": 300,
+      "autoAcceptAlerts": true
+    }
+  },
+  "cloud": {
+    "browserstack": {
+      "username": "${BROWSERSTACK_USERNAME}",
+      "accessKey": "${BROWSERSTACK_ACCESS_KEY}",
+      "devices": [
+        {
+          "device": "Samsung Galaxy S21",
+          "os_version": "11.0"
+        },
+        {
+          "device": "iPhone 12 Pro",
+          "os_version": "14"
+        }
+      ]
+    },
+    "saucelabs": {
+      "username": "${SAUCELABS_USERNAME}",
+      "accessKey": "${SAUCELABS_ACCESS_KEY}",
+      "devices": [
+        {
+          "deviceName": "Google Pixel 5",
+          "platformVersion": "11.0"
+        },
+        {
+          "deviceName": "iPhone 12",
+          "platformVersion": "14.5"
+        }
+      ]
+    }
+  }
+}

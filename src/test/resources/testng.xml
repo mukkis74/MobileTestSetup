@@ -1,0 +1,61 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Mobile Test Suite" parallel="tests" thread-count="2">
+
+    <!-- Android Tests -->
+    <test name="Android Tests">
+        <parameter name="platform" value="android" />
+        <groups>
+            <run>
+                <include name="smoke" />
+                <include name="regression" />
+            </run>
+        </groups>
+        <classes>
+            <class name="com.mobiletest.tests.LoginTest" />
+            <!-- Add more test classes as needed -->
+        </classes>
+    </test>
+
+    <!-- API Tests -->
+    <test name="API Tests">
+        <groups>
+            <run>
+                <include name="api" />
+            </run>
+        </groups>
+        <classes>
+            <class name="com.mobiletest.tests.ApiTest" />
+            <!-- Add more API test classes as needed -->
+        </classes>
+    </test>
+
+    <!-- iOS Tests -->
+    <test name="iOS Tests">
+        <parameter name="platform" value="ios" />
+        <groups>
+            <run>
+                <include name="smoke" />
+                <include name="regression" />
+            </run>
+        </groups>
+        <classes>
+            <class name="com.mobiletest.tests.LoginTest" />
+            <!-- Add more test classes as needed -->
+        </classes>
+    </test>
+
+    <!-- Smoke Tests Only -->
+    <test name="Smoke Tests">
+        <parameter name="platform" value="android" />
+        <groups>
+            <run>
+                <include name="smoke" />
+            </run>
+        </groups>
+        <classes>
+            <class name="com.mobiletest.tests.LoginTest" />
+            <!-- Add more test classes as needed -->
+        </classes>
+    </test>
+
+</suite>

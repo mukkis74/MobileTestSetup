@@ -1,0 +1,67 @@
+name: Mobile Tests
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up JDK 11
+      uses: actions/setup-java@v3
+      with:
+        java-version: '11'
+        distribution: 'temurin'
+        cache: maven
+    
+    - name: Install Appium
+      run: |
+        npm install -g appium@2.0.0
+        appium driver install uiautomator2
+        appium driver install xcuitest
+    
+    - name: Start Appium Server
+      run: |
+        appium -p 4723 --log appium.log &
+        sleep 5
+    
+    - name: Setup Android Emulator
+      uses: reactivecircus/android-emulator-runner@v2
+      with:
+        api-level: 29
+        script: echo "Android emulator started"
+    
+    - name: Run Tests
+      run: mvn clean test -DsuiteXmlFile=src/test/resources/testng.xml
+    
+    - name: Generate Allure Report
+      if: always()
+      run: mvn allure:report
+    
+    - name: Upload Allure Report
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: allure-report
+        path: target/site/allure-maven-plugin
+    
+    - name: Upload Screenshots
+      if: failure()
+      uses: actions/upload-artifact@v3
+      with:
+        name: screenshots
+        path: target/screenshots
+    
+    - name: Upload Appium Logs
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: appium-logs
+        path: appium.log
