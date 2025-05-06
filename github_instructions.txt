@@ -1,0 +1,11 @@
+To create a repository on GitHub and push this project, follow these steps:
+
+1. Go to https://github.com/new
+2. Enter 'MobileTestSetup' as the repository name
+3. Choose whether to make it public or private
+4. Do NOT initialize with README, .gitignore, or license as we already have these files
+5. Click 'Create repository'
+6. After creating the repository, run the following command in the terminal:
+   git push -u origin master
+
+This will push your project to the newly created GitHub repository.

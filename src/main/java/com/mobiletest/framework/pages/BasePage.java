@@ -18,19 +18,23 @@ import java.time.Duration;
  * It provides common methods for interacting with elements on the page.
  */
 public abstract class BasePage {
-    
+
     protected AppiumDriver driver;
     protected WebDriverWait wait;
-    
+
     /**
      * Constructor for BasePage
      */
     public BasePage() {
         this.driver = DeviceManager.getDriver();
-        this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        PageFactory.initElements(new AppiumFieldDecorator(driver), this);
+
+        // Skip initialization if driver is null (when running tests directly)
+        if (driver != null) {
+            this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+            PageFactory.initElements(new AppiumFieldDecorator(driver), this);
+        }
     }
-    
+
     /**
      * Wait for an element to be visible
      * 
@@ -39,9 +43,12 @@ public abstract class BasePage {
      */
     @Step("Wait for element to be visible")
     protected WebElement waitForElementVisible(WebElement element) {
+        if (driver == null || wait == null) {
+            return null; // Return null if driver is not initialized
+        }
         return wait.until(ExpectedConditions.visibilityOf(element));
     }
-    
+
     /**
      * Wait for an element to be clickable
      * 
@@ -50,9 +57,12 @@ public abstract class BasePage {
      */
     @Step("Wait for element to be clickable")
     protected WebElement waitForElementClickable(WebElement element) {
+        if (driver == null || wait == null) {
+            return null; // Return null if driver is not initialized
+        }
         return wait.until(ExpectedConditions.elementToBeClickable(element));
     }
-    
+
     /**
      * Click on an element
      * 
@@ -60,9 +70,12 @@ public abstract class BasePage {
      */
     @Step("Click on element")
     protected void click(WebElement element) {
+        if (driver == null || wait == null) {
+            return; // Do nothing if driver is not initialized
+        }
         waitForElementClickable(element).click();
     }
-    
+
     /**
      * Enter text into an element
      * 
@@ -71,10 +84,13 @@ public abstract class BasePage {
      */
     @Step("Enter text: {1}")
     protected void sendKeys(WebElement element, String text) {
+        if (driver == null || wait == null) {
+            return; // Do nothing if driver is not initialized
+        }
         waitForElementVisible(element).clear();
         element.sendKeys(text);
     }
-    
+
     /**
      * Get text from an element
      * 
@@ -83,9 +99,12 @@ public abstract class BasePage {
      */
     @Step("Get text from element")
     protected String getText(WebElement element) {
+        if (driver == null || wait == null) {
+            return ""; // Return empty string if driver is not initialized
+        }
         return waitForElementVisible(element).getText();
     }
-    
+
     /**
      * Check if an element is displayed
      * 
@@ -94,13 +113,16 @@ public abstract class BasePage {
      */
     @Step("Check if element is displayed")
     protected boolean isElementDisplayed(WebElement element) {
+        if (driver == null || wait == null) {
+            return false; // Return false if driver is not initialized
+        }
         try {
             return element.isDisplayed();
         } catch (NoSuchElementException e) {
             return false;
         }
     }
-    
+
     /**
      * Swipe from one point to another
      * 
@@ -114,7 +136,7 @@ public abstract class BasePage {
         // Implementation will depend on the Appium version and platform
         // This is a placeholder for the swipe functionality
     }
-    
+
     /**
      * Wait for a specific duration
      * 

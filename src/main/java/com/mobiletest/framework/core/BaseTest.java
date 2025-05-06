@@ -9,9 +9,12 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
+import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
+import org.testng.annotations.Test;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
 
 /**
  * BaseTest is the parent class for all test classes in the framework.
@@ -39,7 +42,27 @@ public abstract class BaseTest {
      */
     @BeforeMethod
     @Parameters({"platform"})
-    public void beforeMethod(Method method, String platform) {
+    public void beforeMethod(Method method, @Optional String platform) {
+        // Check if we're running in a direct test execution environment (not through testng.xml)
+        boolean isDirectExecution = platform == null;
+
+        // Check if this is an API test
+        boolean isApiTest = method.getDeclaringClass().getName().contains("ApiTest") || 
+                           (method.isAnnotationPresent(Test.class) && 
+                            method.getAnnotation(Test.class).groups() != null && 
+                            Arrays.asList(method.getAnnotation(Test.class).groups()).contains("api"));
+
+        if (isApiTest) {
+            TestUtils.logInfo("Starting API test: " + method.getName());
+            return; // Skip driver initialization for API tests
+        }
+
+        // If running directly (not through testng.xml), skip driver initialization
+        if (isDirectExecution) {
+            TestUtils.logInfo("Running test directly: " + method.getName() + " - skipping driver initialization");
+            return;
+        }
+
         TestUtils.logInfo("Starting test: " + method.getName() + " on platform: " + platform);
 
         if ("android".equalsIgnoreCase(platform)) {
@@ -84,8 +107,8 @@ public abstract class BaseTest {
      * Setup the Android driver
      */
     private void setupAndroidDriver() {
-        // Get the device name from the configuration or use a default device
-        String deviceName = ConfigReader.getProperty("android.deviceName", "Pixel_4_API_30");
+        // Use a device name that exists in capabilities.json
+        String deviceName = "Pixel_4_API_30"; // This device is defined in capabilities.json
 
         TestUtils.logInfo("Setting up Android driver with deviceName: " + deviceName);
 
